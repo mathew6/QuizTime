@@ -1,6 +1,7 @@
 import json
 import boto3
 
+# Lambda Handler to get the leaderboard list (from Dynamo DB)
 def lambda_handler(event, context):
     # leaderboard names
     leaderboard_name_list = [
@@ -14,14 +15,15 @@ def lambda_handler(event, context):
     # dynamo db resource
     dynamo_resource = boto3.resource('dynamodb')
     
+    # iterate through each leaderboard
     for leaderboard_name in leaderboard_name_list:
+        # format and sort leaderboard
         leaderboard_table = dynamo_resource.Table(leaderboard_name)
         unsorted_leaderboard = get_leaderboard(leaderboard_table)
         leaderboard = format_leaderboard(sort_leaderboard(unsorted_leaderboard))
         
+        # add leaderboard to json return object
         json_return[leaderboard_name] = leaderboard
-    
-    print('json_return', json_return)
 
     return {
         'statusCode': 200,
@@ -35,9 +37,11 @@ def get_leaderboard(table):
 
     return leader_list
 
+# sort the leaderboard by score ranking
 def sort_leaderboard(leader_list):
     return sorted(leader_list, key=lambda x: x['num_correct'])
 
+# format the score to improve readability
 def format_leaderboard(leader_list):
     formatted_leader_list = []
     list_length = len(leader_list)
@@ -45,7 +49,7 @@ def format_leaderboard(leader_list):
         # format score as a string (ex. "24 / 25")
         score = f"{item['num_correct']} / {item['num_questions']}"
 
-        # Add user to leader list (ex. "Rank": 1, "Name": "Mathew", "Score": 24 / 25)
+        # Add user to leader list (ex. "Rank": 1, "Name": "PLAYER1", "Score": 24 / 25)
         formatted_leader_list.insert(0, {"Rank": str(list_length-i), "Name": item['name'], "Score": score})
 
     return formatted_leader_list

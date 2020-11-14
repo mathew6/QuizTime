@@ -2,6 +2,7 @@ import json
 import boto3
 from boto3.dynamodb.conditions import Key
 
+# Lambda Handler to score quiz provided as event
 def lambda_handler(event, context):
     print('event', event)
 
@@ -46,10 +47,11 @@ def lambda_handler(event, context):
         json_return["questions"].append({"Question Number": str(q_num), "Question": question, "Result": is_correct, "Correct Answer": answer, "Your Answer": user_answer, "Choices": [a, b, c, d]})
         num_questions += 1
 
+    # user's score
     score = f"SCORE: {num_correct} / {num_questions}"
     json_return["score"] = score
 
-    # update the leaderboard
+    # update the leaderboard (if score is high enough)
     sorted_leader_list = update_leaderboard(leaderboard_table, name, num_correct, num_questions)
     json_return["leaderboard"] = format_leaderboard(sorted_leader_list)
 
@@ -62,13 +64,6 @@ def lambda_handler(event, context):
 def put_item(table, item):
     table.put_item(Item=item)
 
-# get item from Dynamo DB
-def get_item(table, key):
-    response = table.get_item(
-        Key=key
-    )
-    return response['Item']
-
 # get all values in Dynamo Questions table
 def get_answers(table):
     response = table.scan()
@@ -77,7 +72,7 @@ def get_answers(table):
 
     return sorted_items_list
 
-# update Dynamo Leaderboard table depending on score
+# update Dynamo Leaderboard table (if score is high enough) then return leaderboard
 def update_leaderboard(leaderboard_table, name, num_correct, num_questions):
     leaderboard = get_leaderboard(leaderboard_table)
     temp_leader_list = []
@@ -101,7 +96,7 @@ def update_leaderboard(leaderboard_table, name, num_correct, num_questions):
     else:
         leaderboard_table.put_item(Item=new_user_info) # add new user to leaderboard
 
-    # return leader list (max 5)
+    # return leader list (max 5 users)
     return sorted_leader_list
 
 # get all values in Dynamo Leaderboard table
@@ -111,6 +106,7 @@ def get_leaderboard(table):
 
     return items_list
 
+# format the score to improve readability
 def format_leaderboard(leader_list):
     formatted_leader_list = []
     list_length = len(leader_list)

@@ -2,6 +2,7 @@ import json
 import boto3
 from botocore.exceptions import ClientError
 
+# Lambda Handler to create new quiz (store Q&A in Dynamo and generate frontend Qs)
 def lambda_handler(event, context):
     # NEW table name that you want to create
     NEW_TABLE_NAME = 'The-Office-Quiz'
