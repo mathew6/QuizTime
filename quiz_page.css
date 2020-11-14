@@ -1,0 +1,20 @@
+caption {
+    font:20px Verdana;
+}
+th, td, p, input {
+    font:14px Verdana;
+}
+table, th, td 
+{
+    border: solid 1px #DDD;
+    border-collapse: collapse;
+    padding: 2px 3px;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+th {
+    font-weight:bold;
+}
