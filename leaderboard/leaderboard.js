@@ -2,6 +2,7 @@ let endpoint = "https://3ed94zmyfc.execute-api.us-east-1.amazonaws.com/get_leade
 $.getJSON(endpoint, function(data){
     CreateTableFromJSON(data["Modern-Family-Quiz-Leaderboard"], "Modern Family Quiz", "modernFamilyLeaderboard");
     CreateTableFromJSON(data["The-Office-Quiz-Leaderboard"], "The Office Quiz", "theOfficeLeaderboard");
+    CreateTableFromJSON(data["Harry-Potter-Quiz-Leaderboard"], "Harry Potter Quiz", "harryPotterLeaderboard");
     // Add more tables here whenever you make a new quiz...
 });
 
