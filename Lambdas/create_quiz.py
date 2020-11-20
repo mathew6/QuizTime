@@ -32,22 +32,13 @@ def create_question_table(dynamo_resource, new_table_name):
                 {
                     'AttributeName': 'question_num',
                     'KeyType': 'HASH'  # Partition key
-                },
-                {
-                    'AttributeName': 'num',
-                    'KeyType': 'RANGE'  # Sort key
                 }
             ],
             AttributeDefinitions=[
                 {
                     'AttributeName': 'question_num',
                     'AttributeType': 'S'
-                },
-                {
-                    'AttributeName': 'num',
-                    'AttributeType': 'N'
-                },
-    
+                }
             ],
             ProvisionedThroughput={
                 'ReadCapacityUnits': 5,
