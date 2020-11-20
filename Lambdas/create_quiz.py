@@ -61,12 +61,20 @@ def create_leaderboard_table(dynamo_resource, new_table_name):
                 {
                     'AttributeName': 'name',
                     'KeyType': 'HASH'  # Partition key
+                },
+                {
+                    'AttributeName': 'num_correct',
+                    'KeyType': 'RANGE'
                 }
             ],
             AttributeDefinitions=[
                 {
                     'AttributeName': 'name',
                     'AttributeType': 'S'
+                },
+                {
+                    'AttributeName': 'num_correct',
+                    'AttributeType': 'N'
                 }
             ],
             ProvisionedThroughput={
