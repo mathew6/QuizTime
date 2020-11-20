@@ -74,15 +74,17 @@ def get_answers(table):
 
 # update Dynamo Leaderboard table (if score is high enough) then return leaderboard
 def update_leaderboard(leaderboard_table, name, num_correct, num_questions):
+    leaderboard_count = 5 if leaderboard_table.table_name in ["Modern-Family-Quiz-Leaderboard", "The-Office-Quiz-Leaderboard", "Harry-Potter-Quiz-Leaderboard"] else 25
+
     leaderboard = get_leaderboard(leaderboard_table)
     temp_leader_list = []
     new_user_info = {"name": name, "num_correct": num_correct, "num_questions": num_questions}
     temp_leader_list.append(new_user_info)
     temp_leader_list.extend(leaderboard) # append the leaderboard items to list
     
-    # get the leaders (maximum 5)
+    # get the leaders
     sorted_leader_list = sorted(temp_leader_list, key=lambda x: x['num_correct'])
-    if len(sorted_leader_list) > 5:
+    if len(sorted_leader_list) > leaderboard_count:
         # if user is better than worst leader, remove 6th place from dynamo
         if sorted_leader_list[0]['name'] != name:
             leaderboard_table.delete_item(
@@ -96,7 +98,7 @@ def update_leaderboard(leaderboard_table, name, num_correct, num_questions):
     else:
         leaderboard_table.put_item(Item=new_user_info) # add new user to leaderboard
 
-    # return leader list (max 5 users)
+    # return leader list
     return sorted_leader_list
 
 # get all values in Dynamo Leaderboard table
