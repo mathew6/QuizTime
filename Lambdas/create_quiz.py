@@ -5,7 +5,7 @@ from botocore.exceptions import ClientError
 # Lambda Handler to create new quiz (store Q&A in Dynamo and generate frontend Qs)
 def lambda_handler(event, context):
     # NEW table name that you want to create
-    NEW_TABLE_NAME = 'The-Office-Quiz'
+    NEW_TABLE_NAME = 'TEST-Quiz'
 
     # dynamo db resource
     dynamo_resource = boto3.resource('dynamodb')
@@ -32,22 +32,13 @@ def create_question_table(dynamo_resource, new_table_name):
                 {
                     'AttributeName': 'question_num',
                     'KeyType': 'HASH'  # Partition key
-                },
-                {
-                    'AttributeName': 'num',
-                    'KeyType': 'RANGE'  # Sort key
                 }
             ],
             AttributeDefinitions=[
                 {
                     'AttributeName': 'question_num',
                     'AttributeType': 'S'
-                },
-                {
-                    'AttributeName': 'num',
-                    'AttributeType': 'N'
-                },
-    
+                }
             ],
             ProvisionedThroughput={
                 'ReadCapacityUnits': 5,
@@ -68,19 +59,27 @@ def create_leaderboard_table(dynamo_resource, new_table_name):
             TableName=leaderboard_table_name,
             KeySchema=[
                 {
-                    'AttributeName': 'name',
+                    'AttributeName': 'Name',
                     'KeyType': 'HASH'  # Partition key
+                },
+                {
+                    'AttributeName': 'num_correct',
+                    'KeyType': 'RANGE'
                 }
             ],
             AttributeDefinitions=[
                 {
-                    'AttributeName': 'name',
+                    'AttributeName': 'Name',
                     'AttributeType': 'S'
+                },
+                {
+                    'AttributeName': 'num_correct',
+                    'AttributeType': 'N'
                 }
             ],
             ProvisionedThroughput={
-                'ReadCapacityUnits': 5,
-                'WriteCapacityUnits': 5
+                'ReadCapacityUnits': 25,
+                'WriteCapacityUnits': 25
             }
         )
         table.meta.client.get_waiter('table_exists').wait(TableName=leaderboard_table_name)

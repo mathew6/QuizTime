@@ -18,10 +18,10 @@ def lambda_handler(event, context):
     
     # iterate through each leaderboard
     for leaderboard_name in leaderboard_name_list:
-        # format and sort leaderboard
+        # rank and sort leaderboard
         leaderboard_table = dynamo_resource.Table(leaderboard_name)
-        unsorted_leaderboard = get_leaderboard(leaderboard_table)
-        leaderboard = format_leaderboard(sort_leaderboard(unsorted_leaderboard))
+        unsorted_leaderboard = get_table_items(leaderboard_table)
+        leaderboard = rank(sort_list_by(unsorted_leaderboard, 'num_correct', True))
         
         # add leaderboard to json return object
         json_return[leaderboard_name] = leaderboard
@@ -31,26 +31,29 @@ def lambda_handler(event, context):
         'body': json.dumps(json_return)
     }
 
-# get all values in Dynamo Leaderboard table
-def get_leaderboard(table):
+# get all values in Dynamo table
+def get_table_items(table):
     response = table.scan()
-    leader_list = response.get('Items', [])
+    items_list = response.get('Items', [])
 
-    return leader_list
+    return items_list
 
-# sort the leaderboard by score ranking
-def sort_leaderboard(leader_list):
-    return sorted(leader_list, key=lambda x: x['num_correct'])
+# sort list by key
+def sort_list_by(items_list, sort_key, reverse_bool):
+    return sorted(items_list, key=lambda x: x[sort_key], reverse=reverse_bool)
 
-# format the score to improve readability
-def format_leaderboard(leader_list):
-    formatted_leader_list = []
-    list_length = len(leader_list)
-    for i, item in enumerate(leader_list):
-        # format score as a string (ex. "24 / 25")
-        score = f"{item['num_correct']} / {item['num_questions']}"
+# add rank to items list
+def rank(items_list):
+    ranked_list = []
+    curr_rank = 0
+    prev_num_correct = None
 
-        # Add user to leader list (ex. "Rank": 1, "Name": "PLAYER1", "Score": 24 / 25)
-        formatted_leader_list.insert(0, {"Rank": str(list_length-i), "Name": item['name'], "Score": score})
+    for item in items_list:
+        print('item', item)
+        if item['num_correct'] != prev_num_correct:
+            curr_rank += 1
 
-    return formatted_leader_list
+        ranked_list.append({"Rank": str(curr_rank), "Name": item["Name"], "Score": item["Score"]})
+        prev_num_correct = item['num_correct']
+    
+    return ranked_list
