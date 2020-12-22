@@ -7,7 +7,8 @@ def lambda_handler(event, context):
     leaderboard_name_list = [
         'Modern-Family-Quiz-Leaderboard',
         'The-Office-Quiz-Leaderboard',
-        'Harry-Potter-Quiz-Leaderboard'
+        'Harry-Potter-Quiz-Leaderboard',
+        'Captain-America-Quiz-Leaderboard'
     ]
 
     # json return object (with leaderboards)
