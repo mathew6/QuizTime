@@ -4,7 +4,7 @@ Survey
 
 // get JSON data from "create_quiz" Lambda print output
 var json = {
-    "title": "Captain America Quiz",
+    "title": "Captain America Quiz (By Janak Shah)",
     "showProgressBar": "bottom",
     "startSurveyText": "Start Quiz",
     "pages": [
