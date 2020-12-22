@@ -2,24 +2,26 @@ import json
 import boto3
 from boto3.dynamodb.conditions import Key
 
+OLD_QUIZZES = ["Modern-Family-Quiz", "The-Office-Quiz", "Harry-Potter-Quiz"]
+
 # Lambda Handler to score quiz provided as event
 def lambda_handler(event, context):
-    print('event', event)
+    print('Event:', event)
 
     # quiz info
     body = json.loads(event['body'])
-    quiz_name = body['quiz_name']
     responses = body['data']
-    name = responses['name']
+    quiz_name = body['quiz_name']
     leaderboard_name = quiz_name + '-Leaderboard'
+    username = responses['name']
 
     # dynamo db question/answer and leaderboard tables
     dynamo_resource = boto3.resource('dynamodb')
-    questions_table = dynamo_resource.Table(quiz_name)
+    answers_table = dynamo_resource.Table(quiz_name)
     leaderboard_table = dynamo_resource.Table(leaderboard_name)
 
     # get all questions and answers from Dynamo DB table
-    answers = get_answers(questions_table)
+    answers = sort_list_by(get_table_items(answers_table), 'num', False)
 
     json_return = {"score": "-", "leaderboard": [], "questions": []}
     num_correct = 0
@@ -47,76 +49,47 @@ def lambda_handler(event, context):
         json_return["questions"].append({"Question Number": str(q_num), "Question": question, "Result": is_correct, "Correct Answer": answer, "Your Answer": user_answer, "Choices": [a, b, c, d]})
         num_questions += 1
 
-    # user's score
-    score = f"SCORE: {num_correct} / {num_questions}"
-    json_return["score"] = score
+    # user score
+    score = f"{num_correct} / {num_questions}"
+    display_score = "SCORE: " + score
+    json_return["score"] = display_score
 
-    # update the leaderboard (if score is high enough)
-    sorted_leader_list = update_leaderboard(leaderboard_table, name, num_correct, num_questions)
-    json_return["leaderboard"] = format_leaderboard(sorted_leader_list)
+    # update the leaderboard
+    if quiz_name not in OLD_QUIZZES:
+        new_user_result = {"Name": username, "num_correct": num_correct, "num_questions": num_questions, "Score": score}
+        leaderboard_table.put_item(Item=new_user_result)
+    ranked_leader_list = rank(sort_list_by(get_table_items(leaderboard_table), 'num_correct', True))
+    json_return["leaderboard"] = ranked_leader_list
 
+    print('JSON Return:', json_return)
     return {
         'statusCode': 200,
         'body': json.dumps(json_return)
     }
 
-# put item in Dynamo DB
-def put_item(table, item):
-    table.put_item(Item=item)
-
-# get all values in Dynamo Questions table
-def get_answers(table):
-    response = table.scan()
-    items_list = response.get('Items', [])
-    sorted_items_list = sorted(items_list, key=lambda x: x['num'])
-
-    return sorted_items_list
-
-# update Dynamo Leaderboard table (if score is high enough) then return leaderboard
-def update_leaderboard(leaderboard_table, name, num_correct, num_questions):
-    leaderboard_count = 5 if leaderboard_table.table_name in ["Modern-Family-Quiz-Leaderboard", "The-Office-Quiz-Leaderboard", "Harry-Potter-Quiz-Leaderboard"] else 25
-
-    leaderboard = get_leaderboard(leaderboard_table)
-    temp_leader_list = []
-    new_user_info = {"name": name, "num_correct": num_correct, "num_questions": num_questions}
-    temp_leader_list.append(new_user_info)
-    temp_leader_list.extend(leaderboard) # append the leaderboard items to list
-    
-    # get the leaders
-    sorted_leader_list = sorted(temp_leader_list, key=lambda x: x['num_correct'])
-    if len(sorted_leader_list) > leaderboard_count:
-        # if user is better than worst leader, remove 6th place from dynamo
-        if sorted_leader_list[0]['name'] != name:
-            leaderboard_table.delete_item(
-                Key={
-                    'name': sorted_leader_list[0]['name']
-                }
-            )
-            leaderboard_table.put_item(Item=new_user_info) # add new user to leaderboard
-        # remove 6th place from list
-        del sorted_leader_list[0]
-    else:
-        leaderboard_table.put_item(Item=new_user_info) # add new user to leaderboard
-
-    # return leader list
-    return sorted_leader_list
-
-# get all values in Dynamo Leaderboard table
-def get_leaderboard(table):
+# get all values in Dynamo table
+def get_table_items(table):
     response = table.scan()
     items_list = response.get('Items', [])
 
     return items_list
 
-# format the score to improve readability
-def format_leaderboard(leader_list):
-    formatted_leader_list = []
-    list_length = len(leader_list)
-    for i, item in enumerate(leader_list):
-        # format score as a string (ex. "24 / 25")
-        score = f"{item['num_correct']} / {item['num_questions']}"
+# sort list by key
+def sort_list_by(items_list, sort_key, reverse_bool):
+    return sorted(items_list, key=lambda x: x[sort_key], reverse=reverse_bool)
 
-        # Add user to leader list (ex. "Rank": 1, "Name": "Mathew", "Score": 24 / 25)
-        formatted_leader_list.insert(0, {"Rank": str(list_length-i), "Name": item['name'], "Score": score})
+# add rank to items list
+def rank(items_list):
+    ranked_list = []
+    curr_rank = 0
+    prev_num_correct = None
 
-    return formatted_leader_list
+    for item in items_list:
+        print('item', item)
+        if item['num_correct'] != prev_num_correct:
+            curr_rank += 1
+
+        ranked_list.append({"Rank": str(curr_rank), "Name": item["Name"], "Score": item["Score"]})
+        prev_num_correct = item['num_correct']
+    
+    return ranked_list
