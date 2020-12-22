@@ -421,7 +421,7 @@ var json = {
                     "title": "The revelation of the Winter Soldier killing his parents causes Iron Man to angrily fight both Steve and Bucky. What does Iron Man do to Bucky?",
                     "choices": [
                         "Impales him with Cap's shield",
-                        "Knocks him out with",
+                        "Knocks him out",
                         "Blasts his metal arm off",
                         "Calmly acknowledges his mind control"
                     ]
