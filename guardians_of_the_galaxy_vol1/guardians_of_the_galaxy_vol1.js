@@ -268,7 +268,7 @@ var json = {
                 {
                     "type": "radiogroup",
                     "name": "q18",
-                    "title": "What is the Infinty Stone in the Orb?",
+                    "title": "What is the Infinity Stone in the Orb?",
                     "choices": [
                         "Mind Stone",
                         "Reality Stone",
