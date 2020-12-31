@@ -1,10 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Quiz Time!</title>
+        <title>Harry Potter Quiz</title>
+
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- CSS -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="https://surveyjs.azureedge.net/1.8.8/modern.css" type="text/css" rel="stylesheet"/>
         <link rel="stylesheet" href="/index.css">
+        <link rel="stylesheet" href="/quiz_page.css">
+
+        <!-- JS -->
+        <script src="https://unpkg.com/jquery"></script>
+        <script src="https://surveyjs.azureedge.net/1.8.8/survey.jquery.js"></script>
+
     </head>
     <body>
         <!-- Nav Bar -->
@@ -20,18 +29,15 @@
                     <a href="/guardians_of_the_galaxy_vol1/guardians_of_the_galaxy_vol1.html">Guardians of the Galaxy Vol. 1 Quiz</a>
                 </div>
             </div>
-            <a href="/leaderboard/leaderboard.html">Leaderboard</a> 
+            <a href="/leaderboard/leaderboard.html">Leaderboard</a>
         </div>
+        
+        <!-- Quiz -->
+        <div id="surveyElement" style="display:inline-block;width:100%;"></div>
+        <div id="leaderboardTable"></div>
+        <div id="quizResultTable"></div>
 
-        <!-- Slide Show -->
-        <section>
-            <img class="mySlides" src="/Pictures/guardians_of_the_galaxy_vol1.jpeg" style="width:100%">
-            <img class="mySlides" src="/Pictures/captain_america_option1.jpg" style="width:100%">
-            <img class="mySlides" src="/Pictures/harry_potter_option1.jpg" style="width:100%">
-            <img class="mySlides" src="/Pictures/the_office_option1.jpg" style="width:100%">
-            <img class="mySlides" src="/Pictures/modern_family_option1.jpg" style="width:100%">
-        </section>
-        <script type="text/javascript" src="/index.js"></script>
+        <script type="text/javascript" src="./guardians_of_the_galaxy_vol1.js"></script>
 
     </body>
 </html>
