@@ -4,6 +4,7 @@ $.getJSON(endpoint, function(data){
     CreateTableFromJSON(data["The-Office-Quiz-Leaderboard"], "The Office Quiz", "theOfficeLeaderboard");
     CreateTableFromJSON(data["Harry-Potter-Quiz-Leaderboard"], "Harry Potter Quiz", "harryPotterLeaderboard");
     CreateTableFromJSON(data["Captain-America-Quiz-Leaderboard"], "Captain America Quiz", "captainAmericaLeaderboard");
+    CreateTableFromJSON(data["Guardians-of-the-Galaxy-Vol1-Quiz-Leaderboard"], "Guardians of the Galaxy Vol1 Quiz", "guardiansOfTheGalaxyVol1Leaderboard");
     // Add more tables here whenever you make a new quiz...
 });
 
