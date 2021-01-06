@@ -41,8 +41,8 @@ def create_question_table(dynamo_resource, new_table_name):
                 }
             ],
             ProvisionedThroughput={
-                'ReadCapacityUnits': 5,
-                'WriteCapacityUnits': 5
+                'ReadCapacityUnits': 1,
+                'WriteCapacityUnits': 1
             }
         )
         table.meta.client.get_waiter('table_exists').wait(TableName=new_table_name)
@@ -78,8 +78,8 @@ def create_leaderboard_table(dynamo_resource, new_table_name):
                 }
             ],
             ProvisionedThroughput={
-                'ReadCapacityUnits': 25,
-                'WriteCapacityUnits': 25
+                'ReadCapacityUnits': 1,
+                'WriteCapacityUnits': 1
             }
         )
         table.meta.client.get_waiter('table_exists').wait(TableName=leaderboard_table_name)
