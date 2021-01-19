@@ -17,7 +17,7 @@ var json = {
                     "choices": [
                         "News Anchor",
                         "Lawyer",
-                        "Teacher",
+                        "Plumber",
                         "Architect"
                     ]
                 }
@@ -315,7 +315,7 @@ var json = {
                     "name": "q21",
                     "title": "Which of the following would you find in Barney's apartment?",
                     "choices": [
-                        "A Full-size Clone Trooper Figure",
+                        "A Full-size Storm Trooper Figure",
                         "A Full-size Gandalf the Great Figure",
                         "A Full-size Johnny Lawrence Figure",
                         "A Full-size Joker Figure"
