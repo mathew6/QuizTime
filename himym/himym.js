@@ -333,7 +333,7 @@ var json = {
                         "Sensory Deprivator 100",
                         "Sensory Deprivator 500",
                         "Sensory Deprivator 1000",
-                        "Sensory Deprivator 50000"
+                        "Sensory Deprivator 5000"
                     ]
                 }
             ]
