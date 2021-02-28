@@ -62,7 +62,7 @@ var json = {
                     "choices": [
                         "Mike Wheeler",
                         "Jim Hopper",
-                        "Jonathan Byers",
+                        "Nancy Wheeler",
                         "Barb Holland"
                     ]
                 }
