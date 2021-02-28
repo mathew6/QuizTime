@@ -163,7 +163,7 @@ var json = {
                 {
                     "type": "radiogroup",
                     "name": "q11",
-                    "title": "At the beginning of Season 2, we are introduced to a girl with the psychic power to make people see things. She helps her gang rob a bank in Pitsburgh. What is the number on her arm?",
+                    "title": "At the beginning of Season 2, we are introduced to a girl with the psychic power to make people see things. She helps her gang rob a bank in Pittsburgh. What is the number on her arm?",
                     "choices": [
                         "006",
                         "007",
