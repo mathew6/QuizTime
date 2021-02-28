@@ -433,7 +433,7 @@ var json = {
                 {
                     "type": "radiogroup",
                     "name": "q29",
-                    "title": "In Season 3, who says \"Now that you're at a high school, which means you're technically an adult, don't you think it's time you moved on from primitive constructs such as popularity?\"",
+                    "title": "In Season 3, who says \"Now that you're out of high school, which means you're technically an adult, don't you think it's time you moved on from primitive constructs such as popularity?\"",
                     "choices": [
                         "Mike",
                         "Lucas",
