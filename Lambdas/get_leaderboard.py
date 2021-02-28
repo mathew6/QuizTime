@@ -11,7 +11,8 @@ def lambda_handler(event, context):
         'Captain-America-Quiz-Leaderboard',
         'Guardians-of-the-Galaxy-Vol1-Quiz-Leaderboard',
         'Star-Wars-Original-Trilogy-Quiz-Leaderboard',
-        'HIMYM-Quiz-Leaderboard'
+        'HIMYM-Quiz-Leaderboard',
+        'Stranger-Things-Quiz-Leaderboard'
     ]
 
     # json return object (with leaderboards)
