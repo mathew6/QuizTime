@@ -28,7 +28,7 @@ var json = {
                 {
                     "type": "radiogroup",
                     "name": "q2",
-                    "title": "In Season 1, this Doctor forced experiments to be conducted on young children, like Eleven.",
+                    "title": "In Season 1, this doctor forced experiments to be conducted on young children, like Eleven.",
                     "choices": [
                         "Dr. Matthew Brewer",
                         "Dr. Mark Banner",
