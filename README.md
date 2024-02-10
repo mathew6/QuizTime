@@ -1,5 +1,5 @@
 # QuizTime
-**Website URL**: www.taixpress.com
+**Website URL**: www.freethequiz.com
 
 A fun website just for sitcom/movie trivia (using only AWS resources on the Free Tier)
 
